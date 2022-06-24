@@ -1,4 +1,4 @@
 node_modules/
 dist/
 .vscode/
-.out.csv
+out.csv
