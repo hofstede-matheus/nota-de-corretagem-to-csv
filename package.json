@@ -1,11 +1,11 @@
 {
-  "name": "clear-nota-to-csv",
+  "name": "nota-de-corretagem-to-csv",
   "version": "1.0.0",
   "description": "",
   "main": "src/index.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "tsc && node dist/index.js"
+    "start:cli": "tsc && node dist/presentation/cli/index.js"
   },
   "keywords": [],
   "author": "",

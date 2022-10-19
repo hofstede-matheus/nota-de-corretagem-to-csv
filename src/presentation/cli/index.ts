@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import yargs from "yargs";
-import { execute } from './usecases/ClearBrokerageNoteToCsv'
+import { execute } from '../../usecases/BrokerageNoteToCsv'
 
 async function main() {
   const options = await yargs
@@ -13,12 +13,3 @@ async function main() {
 }
 
 main()
-
-
-
-
-
-
-
-
-

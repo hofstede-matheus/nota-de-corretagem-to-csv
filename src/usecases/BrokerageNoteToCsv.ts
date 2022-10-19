@@ -1,6 +1,7 @@
 import { PDFExtract } from 'pdf.js-extract';
 import { Parser } from 'json2csv';
 import fs from 'fs';
+import { parseReal } from '../helpers/helpers';
 
 interface OperationRow {
   buy_sell: string;
@@ -129,8 +130,4 @@ export async function execute(
   } catch (err) {
     console.error(err);
   }
-}
-
-function parseReal(value: string) {
-  return value.replace(/,/, '.')
 }
