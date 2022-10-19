@@ -15,16 +15,16 @@ interface OperationRow {
 }
 
 export async function execute(
-  verbose: boolean = false,
-  path: string,
+{ path, verboseLogFunction }: { path: string; verboseLogFunction: boolean | ((message: any) => void); },
 ) {
   const operations: OperationRow[] = [];
   const data = await new PDFExtract().extract(path, {})
+  const shouldLog = typeof verboseLogFunction === 'function';
 
   data.pages.map((it) => {
-    if (verbose) {
+    if (shouldLog) {
       const document = it.content.map((it) => it.str)
-      console.table(document)
+      verboseLogFunction(document)
     }
     it.content.map((item, index) => {
       if (item.str === '1-BOVESPA') {
@@ -65,8 +65,8 @@ export async function execute(
             operationAdjustmentPrice: parseReal(it.content[titleLastIndex - 2].str),
           }
 
-          if (verbose) {
-            console.table(csvLine)
+          if (shouldLog) {
+            verboseLogFunction(csvLine)
           }
 
           operations.push(csvLine)
@@ -107,7 +107,8 @@ export async function execute(
             operationAdjustmentPrice: parseReal(it.content[titleLastIndex - 2].str),
           }
 
-          if (verbose) {
+          if (shouldLog) {
+            verboseLogFunction(csvLine)
             console.table(csvLine)
           }
 
@@ -121,7 +122,7 @@ export async function execute(
     const parser = new Parser({fields: ['buy_sell', 'operationDate', 'marketType', 'specification', 'title', 'quantity', 'adjustmentPrice', 'operationAdjustmentPrice']});
     const csv = parser.parse(operations);
 
-    if (verbose) console.log(csv);
+    if (shouldLog) verboseLogFunction(csv)
     
     fs.writeFile('out.csv', csv, function(err) {
       if (err) throw err;

@@ -9,7 +9,7 @@ async function main() {
     .option("f", { alias: "file", describe: "Path to file", type: "string", demandOption: true })
     .argv;
 
-  execute(options.v, options.f)
+  execute({ path: options.f, verboseLogFunction: options.v === true && console.table })
 }
 
 main()
