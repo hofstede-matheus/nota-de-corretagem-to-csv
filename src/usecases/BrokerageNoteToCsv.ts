@@ -22,10 +22,6 @@ export async function execute(
   const shouldLog = typeof verboseLogFunction === 'function';
 
   data.pages.map((it) => {
-    if (shouldLog) {
-      const document = it.content.map((it) => it.str)
-      verboseLogFunction(document)
-    }
     it.content.map((item, index) => {
       if (item.str === '1-BOVESPA') {
         const titleSpecification = it.content[index - 3].str
