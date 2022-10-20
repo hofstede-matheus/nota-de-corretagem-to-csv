@@ -1,6 +1,12 @@
 # clear-nota-to-csv
 
-## usage:
+## setup:
+
+```
+yarn
+```
+
+## cli usage:
 
 ```
 Usage: -f <path>
@@ -14,4 +20,9 @@ Options:
 
 ## example:
 
-```npx ts-node . -f example.pdf -v```
+```yarn start:cli -f example.pdf -v```
+
+
+## http server usage:
+
+```yarn start:server```
