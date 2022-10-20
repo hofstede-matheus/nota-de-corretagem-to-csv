@@ -9,13 +9,10 @@ const PORT = 3001
 const storage = multer.memoryStorage();
 const upload = multer({ storage})
 
-app.get('/', (req: any, res: any) => {
-  res.send('Hello World!')
-})
-
 app.post('/', upload.single('pdf'), async (req: any, res: any) => {
+  if (!req.file) return res.send('null').status(200);
   const result = await BrokerageNoteToCsv.execute(req.file.buffer, false)
-  res.attachment('customers.csv').send(result)
+  res.attachment('parsed.csv').send(result)
 })
 
 app.listen(PORT, () => {
