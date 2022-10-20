@@ -1,6 +1,5 @@
 import { PDFExtract } from 'pdf.js-extract';
 import { Parser } from 'json2csv';
-import fs from 'fs';
 import { parseReal } from '../helpers/helpers';
 
 interface OperationRow {
@@ -14,12 +13,14 @@ interface OperationRow {
   operationAdjustmentPrice: string;
 }
 
-export async function execute(
-{ path, verboseLogFunction }: { path: string; verboseLogFunction: boolean | ((message: any) => void); },
-) {
+export async function execute(path: string | Buffer, verbose: boolean): Promise<string> {
   const operations: OperationRow[] = [];
-  const data = await new PDFExtract().extract(path, {})
-  const shouldLog = typeof verboseLogFunction === 'function';
+  let data;
+
+  if (typeof path === 'string')
+    data = await new PDFExtract().extract(path as string, {})
+  else
+    data = await new PDFExtract().extractBuffer(path as Buffer, {})
 
   data.pages.map((it) => {
     it.content.map((item, index) => {
@@ -61,9 +62,7 @@ export async function execute(
             operationAdjustmentPrice: parseReal(it.content[titleLastIndex - 2].str),
           }
 
-          if (shouldLog) {
-            verboseLogFunction(csvLine)
-          }
+          if (verbose) console.table(csvLine)
 
           operations.push(csvLine)
         } else {
@@ -103,10 +102,7 @@ export async function execute(
             operationAdjustmentPrice: parseReal(it.content[titleLastIndex - 2].str),
           }
 
-          if (shouldLog) {
-            verboseLogFunction(csvLine)
-            console.table(csvLine)
-          }
+          if (verbose) console.table(csvLine)
 
           operations.push(csvLine)
         }
@@ -118,13 +114,12 @@ export async function execute(
     const parser = new Parser({fields: ['buy_sell', 'operationDate', 'marketType', 'specification', 'title', 'quantity', 'adjustmentPrice', 'operationAdjustmentPrice']});
     const csv = parser.parse(operations);
 
-    if (shouldLog) verboseLogFunction(csv)
+    if (verbose) console.table(csv)
+
+    return csv;
     
-    fs.writeFile('out.csv', csv, function(err) {
-      if (err) throw err;
-      console.log('file saved!');
-    });
   } catch (err) {
     console.error(err);
+    return "error";
   }
 }
