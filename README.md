@@ -1,5 +1,7 @@
 # clear-nota-to-csv
 
+backend for nota-de-corretagem-to-csv
+
 ## setup:
 
 ```
@@ -14,11 +16,11 @@ Usage: -f <path>
 Options:
   --help         Show help                                             [boolean]
   --version      Show version number                                   [boolean]
-  -v, --verbose  Log all parsing process                               [boolean]
+  -v, --verbose  Log all parsing process              [boolean] [default: false]
   -f, --file     Path to file                                [string] [required]
 ```
 
-## example:
+### example:
 
 ```yarn start:cli -f example.pdf -v```
 
