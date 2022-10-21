@@ -1,5 +1,5 @@
-import * as express from 'express'
-import * as cors from 'cors'
+import express from 'express'
+import cors from 'cors'
 import * as BrokerageNoteToCsv from '../../services/BrokerageNoteToCsv'
 import filesUpload from './middleware/middleware'
 
