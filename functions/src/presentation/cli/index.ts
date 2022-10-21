@@ -1,6 +1,6 @@
 #!/usr/bin/env node
-import yargs from "yargs";
-import fs from 'fs';
+import * as yargs from "yargs";
+import * as fs from 'fs';
 import * as BrokerageNoteToCsv from '../../services/BrokerageNoteToCsv'
 
 async function main() {
