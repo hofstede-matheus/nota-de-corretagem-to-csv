@@ -6,7 +6,6 @@ const fs = require('fs');
 
 
 export default function filesUpload(req, res, next) {
-  console.log('aqui8');
   // See https://cloud.google.com/functions/docs/writing/http#multipart_data
   const busboy = Busboy({
     headers: req.headers,
@@ -30,13 +29,9 @@ export default function filesUpload(req, res, next) {
   });
 
   busboy.on("file", (fieldname, file, filename, encoding, mimetype) => {
-    console.log("filename:", filename);
-    console.log("tmpdir:", tmpdir);
 
     const filepath = path.join(tmpdir, filename.filename);
-    console.log(
-      `Handling file upload field ${fieldname}: ${filename} (${filepath})`
-    );
+
     const writeStream = fs.createWriteStream(filepath);
     file.pipe(writeStream);
 
@@ -46,9 +41,7 @@ export default function filesUpload(req, res, next) {
         writeStream.on("finish", () => {
           fs.readFile(filepath, (err, buffer) => {
             const size = Buffer.byteLength(buffer);
-            console.log(`${filename} is ${size} bytes`);
             if (err) {
-              console.log("err");
               return reject(err);
             }
 
@@ -76,7 +69,6 @@ export default function filesUpload(req, res, next) {
   });
 
   busboy.on("finish", () => {
-    console.log("finish:");
     Promise.all(fileWrites)
       .then(() => {
         req.body = fields;
@@ -85,9 +77,6 @@ export default function filesUpload(req, res, next) {
       })
       .catch(next);
   });
-
-  console.log("end");
-
 
   if (req.rawBody) {
     busboy.end(req.rawBody);
